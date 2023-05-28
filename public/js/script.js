@@ -1,36 +1,26 @@
+const form = document.getElementById('form1');
+const address = document.getElementById('address');
+const error = document.getElementById('error');
+const target = document.getElementById('location');
+const forcast = document.getElementById('forcast');
 
-let form = document.getElementById('form1')
-form.addEventListener('submit',(e)=>{
-    e.preventDefault()
-    // console.log(document.getElementById('address').value)
-    weatherFunction()
-    form.reset()
+
+form.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    weatherFunc()
 })
-const errorF = document.getElementById('error')
-const locationF = document.getElementById('location')
-const forecastF = document.getElementById('forecast')
 
-// async --> function return promise
-let weatherFunction = async() =>{
+let weatherFunc = async () => {
     try{
-        const address = document.getElementById('address').value
-        const res = await fetch('http://localhost:3000/weather?address='+address)
-        const data = await res.json()
-        console.log(data)
-        if(data.error){
-            errorF.innerText = data.error
-            locationF.innerText =""
-            forecastF.innerText =""
+        const value = address.value;
+        const res = await fetch(`http://localhost:3000/weather?address=${value}`);
+        const data = await res.json();
+        if(data.error) error.innerHTML = data.error
+        else{
+            target.innerText = data.location;
+            forcast.innerText = data.forcast
         }
-        else {
-            locationF.innerText = data.location
-            forecastF.innerText = data.forecast
-            errorF.innerText =""
-        }
-    }
-    catch(e){
-        console.log(e)
+    }catch(e){
+        error.innerHTML = e
     }
 }
-
-// 3 
